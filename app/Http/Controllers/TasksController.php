@@ -16,21 +16,21 @@ class TasksController extends Controller
      // getでtasks/にアクセスされた場合の「一覧表示処理
     public function index()
     {
-        $date = [];
+        $data = [];
         if(\Auth::check()) {    // 認証済みの場合
             // 認証済みユーザを取得
             $user = \Auth::user();
             // ユーザの投稿の一覧を作成日時の降順で取得
             $tasks = $user->tasks()->orderBy("created_at", "desc")->Paginate(5);
             
-            $date = [
+            $data = [
                 "user" => $user,
                 "tasks" => $tasks,
                 ];
         }
         
             // ビューでそれらを表示
-            return view("tasks.index", $date);
+            return view("tasks.index", $data);
     }
 
     /**
@@ -114,10 +114,18 @@ class TasksController extends Controller
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
+        if (\Auth::id() === $task->user_id) {
         // タスク編集ビューでそれを表示
         return view("tasks.edit", [
             "task" => $task,
             ]);
+        }
+        // 認証済みユーザ（閲覧者）以外がアクセスした場合は、トップページに
+        else {
+            return redirect("/");
+        
+        }
+        
         
         }
 
