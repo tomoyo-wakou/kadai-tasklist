@@ -17,7 +17,8 @@ class TasksController extends Controller
     public function index()
     {
         $data = [];
-        if(\Auth::check()) {    // 認証済みの場合
+        // 認証済みの場合
+        if(\Auth::check()) {    
             // 認証済みユーザを取得
             $user = \Auth::user();
             // ユーザの投稿の一覧を作成日時の降順で取得
@@ -29,7 +30,6 @@ class TasksController extends Controller
                 ];
         }
         
-            // ビューでそれらを表示
             return view("tasks.index", $data);
     }
 
@@ -41,12 +41,19 @@ class TasksController extends Controller
      // getでtasks/createにアクセスされた場合の「新規登録画面表示処理」
     public function create()
     {
-        $task = new Task;
         
+        $task = new Task;
+        // 認証済みの場合
+        if (\Auth::check()) {
         // タスク作成ビューを表示
         return view("tasks.create", [
             "task" => $task,
         ]);
+        }
+        else {
+            return redirect("/");
+        }
+        
     }
 
     /**
@@ -68,7 +75,8 @@ class TasksController extends Controller
         $task = new Task;
         $task->status = $request->status;
         $task->content = $request->content;
-
+        
+        // User_idとidの紐づけ
         \Auth::user()->tasks()->save($task);
         
         // 前のURLへリダイレクトさせる
@@ -87,7 +95,7 @@ class TasksController extends Controller
         
         // idの値でタスクを検索して取得
         $task = \App\Task::findOrFail($id);
-        
+        // 認証済みの場合
         if (\Auth::id() === $task->user_id) {
         // タスク詳細ビューでそれを表示
         return view("tasks.show", [
