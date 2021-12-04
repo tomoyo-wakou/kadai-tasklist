@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
     
      /**
-     * このユーザが所有する投稿。（ Micropostモデルとの関係を定義）
+     * このユーザが所有する投稿。（ Tasklistモデルとの関係を定義）
      */
      public function tasks()
      {
@@ -50,6 +50,6 @@ class User extends Authenticatable
      */
      public function loadRelationshipCounts()
      {
-         $this->loadedCount("tasks");
+         $this->loadCount("tasks");
      }
 }

@@ -11,10 +11,11 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 @if (Auth::check())
+                    <li class="navbar-brand">ようこそ, {{ Auth::user()->name }}さん</span>
                     {{-- ログアウトへのリンク --}}
-                    <li class="dropdown-item">{!! link_to_route("logout.get", "Logout") !!}</li>
-                {{-- タスク作成ページへのリンク --}}
-                <li class="nav-item">{!! link_to_route('tasks.create', '新規タスクの投稿', [], ['class' => 'nav-link']) !!}</li>
+                    <li class="nav-item">{!! link_to_route("logout.get", "Logout", [], ["class" => "nav-link"]) !!}</li>
+                    {{-- タスク作成ページへのリンク --}}
+                    <li class="nav-item">{!! link_to_route("tasks.create", "新規タスクの投稿", [], ["class" => "nav-link"]) !!}</li>
                 @else
                     {{-- ユーザ登録ページへのリンク --}}
                     <li class="nav-item">{!! link_to_route("signup.get", "Signup", [], ["class" => "nav-link"]) !!}</li>
